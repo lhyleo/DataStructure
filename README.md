@@ -1,3 +1,3 @@
 # DataStructure
-Data Structure Implementations\n
+Data Structure Implementations:
 This Repo provides implementations of several Data Structures.
