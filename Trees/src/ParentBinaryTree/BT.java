@@ -136,6 +136,16 @@ public class BT<T> extends PBT<T> {
     }
 
     @Override
+    public void printSibling(PBTNode<T> node) {
+        if (node.left != null && node.right != null)
+            System.out.println("Left: " + node.left.value + ", Right: " + node.right.value);
+        else if (node.left == null && node.right != null)
+            System.out.println("Left: Null" + ", Right: " + node.right.value);
+        else
+            System.out.println("Left: " + node.left.value + ", Right: Null");
+    }
+
+    @Override
     public String toString() {
         return this.root.toString();
     }

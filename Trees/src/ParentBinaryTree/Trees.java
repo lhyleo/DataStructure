@@ -21,11 +21,11 @@ public class Trees {
 //            tree.remove(i);
 //        } System.out.println(tree.contains(12));
 //        System.out.println(tree.size());
-        BT<Integer> tree = new BT<>(0);
-        for (int i = 1; i < 100; i++) {
+        BT<Integer> tree = new BT<>();
+        for (int i = 0; i < 100; i++) {
             tree.add(i);
         }
-        for (int i = 10; i < 30; i++) {
+        for (int i = 40; i < 90; i++) {
             tree.remove(i);
         }
 //        tree.remove(8);
