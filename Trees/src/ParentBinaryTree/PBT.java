@@ -1,5 +1,7 @@
 package ParentBinaryTree;
 
+import java.time.Year;
+
 /**
  * Parent Binary Tree
  * @param <T> - the generic type of the tree
@@ -10,10 +12,16 @@ public class PBT<T> {
 
     /**
      * This method creates a parent-binary tree. The PBT does not accept ducplicate values
+     */
+    public PBT() {
+        this.root = null;
+    }
+
+    /**
+     * This method creates a parent-binary tree. The PBT does not accept ducplicate values
      * @param value -the value to be store as root
      */
     public PBT(T value) {
-
         this.root = new PBTNode<>(value);
     }
 
@@ -23,7 +31,7 @@ public class PBT<T> {
      */
     public int size() {
         if (this.root != null)
-            return this.root.getSubSize();
+            return this.root.subSize;
         return 0;
     }
 
@@ -34,8 +42,7 @@ public class PBT<T> {
     public void add(T value) {
         if (this.root == null) {
             root = new PBTNode<>(value);
-        }
-        if (!contains(value)) {
+        } else if (!contains(value)) {
             PBTNode<T> val = new PBTNode<>(value);
             addHelper(this.root, val);
         }
@@ -54,46 +61,48 @@ public class PBT<T> {
         if (PBTNode == null) {
             return false;
         }
-        if (PBTNode.getValue().equals(value)) {
+        if (PBTNode.value.equals(value)) {
             return true;
         } else {
-            return containHelper(PBTNode.getRight(), value) || containHelper(PBTNode.getLeft(), value);
+            return containHelper(PBTNode.right, value) || containHelper(PBTNode.left, value);
         }
     }
 
     private void addHelper(PBTNode<T> PBTNode, PBTNode<T> value) {
-        if (PBTNode.getLeft() == null) {
-            value.setParent(PBTNode);
-            PBTNode.setLeft(value);
+        if (PBTNode.left == null) {
+            value.parent = PBTNode;
+            PBTNode.left = value;
             while (PBTNode != null) {
-                PBTNode.setSubSize(PBTNode.getSubSize() + 1);
-                PBTNode = PBTNode.getParent();
+                PBTNode.subSize++;
+                PBTNode = PBTNode.parent;
             }
-        } else if (PBTNode.getRight() == null) {
-            value.setParent(PBTNode);
-            PBTNode.setRight(value);
+        } else if (PBTNode.right == null) {
+            value.parent = PBTNode;
+            PBTNode.right = value;
             while (PBTNode != null) {
-                PBTNode.setSubSize(PBTNode.getSubSize() + 1);
-                PBTNode = PBTNode.getParent();
+                PBTNode.subSize++;
+                PBTNode = PBTNode.parent;
             }
-        } else if (PBTNode.getLeft().getSubSize() <= PBTNode.getRight().getSubSize()) {
-            if (PBTNode.getLeft() == null) {
-                value.setParent(PBTNode);
-                PBTNode.setLeft(value);
-                while (PBTNode.getParent() != null) {
-                    PBTNode = PBTNode.getParent();
-                    PBTNode.setSubSize(PBTNode.getSubSize() + 1);
+        } else if (PBTNode.left.subSize <= PBTNode.right.subSize) {
+            if (PBTNode.left == null) {
+                value.parent = (PBTNode);
+                PBTNode.left = value;
+                while (PBTNode.parent != null) {
+                    PBTNode = PBTNode.parent;
+                    PBTNode.subSize++;
                 }
             } else
-                addHelper(PBTNode.getRight(), value);
+                addHelper(PBTNode.left, value);
         } else {
-            if (PBTNode.getRight() == null) {
-                value.setParent(PBTNode);
-                PBTNode.setRight(value);
-                while (PBTNode.getParent() != null) {
-                    PBTNode = PBTNode.getParent();
-                    PBTNode.setSubSize(PBTNode.getSubSize() + 1);
+            if (PBTNode.right == null) {
+                value.parent = (PBTNode);
+                PBTNode.right = (value);
+                while (PBTNode.parent != null) {
+                    PBTNode = PBTNode.parent;
+                    PBTNode.subSize++;
                 }
+            } else {
+                addHelper(PBTNode.right, value);
             }
         }
     }
@@ -104,18 +113,18 @@ public class PBT<T> {
      */
     public void remove(T value) {
         if (this.root != null) {
-            if (this.root.getValue().equals(value)) {
-                if (this.root.getRight() == null && this.root.getLeft() == null) {
+            if (this.root.value.equals(value)) {
+                if (this.root.right == null && this.root.left == null) {
                     this.root = null;
-                } else if (this.root.getLeft() == null) {
-                    this.root = this.root.getRight();
-                } else if (this.root.getRight() == null) {
-                    this.root = this.root.getLeft();
+                } else if (this.root.left == null) {
+                    this.root = this.root.right;
+                } else if (this.root.right == null) {
+                    this.root = this.root.left;
                 } else {
-                    PBTNode<T> temp = this.root.getRight();
-                    this.root = this.root.getLeft();
-                    this.root.setParent(null);
-                    this.root.setSubSize(temp.getSubSize());
+                    PBTNode<T> temp = this.root.right;
+                    this.root = this.root.left;
+                    this.root.parent = (null);
+                    this.root.subSize = (temp.subSize);
                     addHelper(this.root, temp);
                 }
             } else
@@ -125,59 +134,58 @@ public class PBT<T> {
 
     private void removeSet(PBTNode<T> right, PBTNode<T> left, PBTNode<T> PBTNode) {
         if (right == null) {
-            left.setParent(PBTNode);
-            PBTNode.setRight(left);
+            left.parent = (PBTNode);
+            PBTNode.right = (left);
             resetSubSize(PBTNode, 1);
         } else if (left == null) {
-            right.setParent(PBTNode);
-            PBTNode.setRight(right);
+            right.parent = (PBTNode);
+            PBTNode.right = (right);
             resetSubSize(PBTNode, 1);
         } else {
-            left.setParent(PBTNode);
+            left.parent = (PBTNode);
             addHelper(left, right);
-            PBTNode.setRight(left);
+            PBTNode.right = (left);
             resetSubSize(PBTNode, 2);
         }
-
     }
 
     private void resetSubSize(PBTNode<T> PBTNode, int count) {
         while (PBTNode != null) {
-            PBTNode.setSubSize(PBTNode.getSubSize() - count);
-            PBTNode = PBTNode.getParent();
+            PBTNode.subSize -= count;
+            PBTNode = PBTNode.parent;
         }
     }
 
     private void removeHelper(PBTNode<T> PBTNode, T value) {
-        if (PBTNode.getRight() != null && PBTNode.getRight().getValue().equals(value)) {
-            PBTNode<T> right = PBTNode.getRight().getRight();
-            PBTNode<T> left = PBTNode.getRight().getLeft();
+        if (PBTNode.right != null && PBTNode.right.value.equals(value)) {
+            PBTNode<T> right = PBTNode.right.right;
+            PBTNode<T> left = PBTNode.right.left;
             if (right == null && left == null) {
-                PBTNode.setRight(null);
+                PBTNode.right = (null);
                 resetSubSize(PBTNode, 1);
             } else {
                 removeSet(right, left, PBTNode);
             }
-        } else if (PBTNode.getLeft() != null && PBTNode.getLeft().getValue().equals(value)) {
-            PBTNode<T> right = PBTNode.getLeft().getRight();
-            PBTNode<T> left = PBTNode.getLeft().getLeft();
+        } else if (PBTNode.left != null && PBTNode.left.value.equals(value)) {
+            PBTNode<T> right = PBTNode.left.right;
+            PBTNode<T> left = PBTNode.left.left;
             if (right == null && left == null) {
-                PBTNode.setLeft(null);
+                PBTNode.left = (null);
                 resetSubSize(PBTNode, 1);
             } else {
                 removeSet(right, left, PBTNode);
             }
         } else {
-            if (PBTNode.getRight() != null)
-                removeHelper(PBTNode.getRight(), value);
-            if (PBTNode.getLeft() != null)
-                removeHelper(PBTNode.getLeft(), value);
+            if (PBTNode.right != null)
+                removeHelper(PBTNode.right, value);
+            if (PBTNode.left != null)
+                removeHelper(PBTNode.left, value);
         }
     }
 
     @Override
-    public String toString() {
-        return this.root.toString();
+        public String toString() {
+            return this.root.toString();
     }
 
     /**
@@ -185,11 +193,32 @@ public class PBT<T> {
      * @param PBTNode - the reference of a node
      */
     public void printSibling(PBTNode<T> PBTNode) {
-        if (PBTNode.getLeft() != null && PBTNode.getRight() != null)
-            System.out.println("Left: " + PBTNode.getLeft().getValue() + ", Right: " + PBTNode.getRight().getValue());
-        else if (PBTNode.getLeft() == null && PBTNode.getRight() != null)
-            System.out.println("Left: Null" + ", Right: " + PBTNode.getRight().getValue());
+        if (PBTNode.left != null && PBTNode.right != null)
+            System.out.println("Left: " + PBTNode.left.value + ", Right: " + PBTNode.right.value);
+        else if (PBTNode.left == null && PBTNode.right != null)
+            System.out.println("Left: Null" + ", Right: " + PBTNode.right.value);
         else
-            System.out.println("Left: " + PBTNode.getLeft().getValue() + ", Right: Null");
+            System.out.println("Left: " + PBTNode.left.value + ", Right: Null");
+    }
+
+    class PBTNode<T> {
+        T value;
+        PBTNode<T> parent;
+        PBTNode<T> left;
+        PBTNode<T> right;
+        int subSize;
+
+        public PBTNode(T value) {
+            this.value = value;
+            this.left = null;
+            this.right = null;
+            this.parent = null;
+            this.subSize = 1;
+        }
+
+        @Override
+        public String toString() {
+            return "Value: " + this.value + ", size: " + this.subSize;
+        }
     }
 }
