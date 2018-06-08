@@ -21,13 +21,15 @@ public class Trees {
 //            tree.remove(i);
 //        } System.out.println(tree.contains(12));
 //        System.out.println(tree.size());
-        BT<Integer> tree = new BT<>();
+        PBT<Integer> tree = new PBT<>();
         for (int i = 0; i < 100; i++) {
             tree.add(i);
         }
-        for (int i = 40; i < 90; i++) {
+        System.out.println(tree.size());
+        for (int i = 20; i < 50; i++) {
             tree.remove(i);
         }
+//        tree.remove(6);
 //        tree.remove(8);
 //        System.out.println(tree.contains(5));
         System.out.println(tree.size());

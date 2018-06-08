@@ -86,13 +86,13 @@ public class BT<T> extends PBT<T> {
                     PBTNode<T> temp = this.root.right;
                     this.root = this.root.left;
                     this.root.parent = (null);
-                    this.root.subSize = (temp.subSize);
+                    this.root.subSize += (temp.subSize);
                     addHelper(this.root, temp);
                 }
             } else {
                 removeHelper(this.root, value);
+                updateSubSize(this.root);
             }
-            updateSubSize(this.root);
         }
     }
 
